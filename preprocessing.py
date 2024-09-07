@@ -31,11 +31,23 @@ def get_one_hot(raw: pd.DataFrame, distinct: pd.DataFrame) -> pd.DataFrame:
     return distinct
 
 
-raw_df = pd.read_csv("raw_data/transactions.csv")
-distinct_df = get_distinct(raw_df)
-one_hot_df = get_one_hot(raw_df.iloc[:, 1:], distinct_df)
-one_hot_df.insert(0, "item_count", raw_df["Item(s)"])
-print(np.sum(one_hot_df["item_count"]), np.sum(one_hot_df.iloc[:, 1:].mean() * 9835))
+def get_product_count_by_item(raw: pd.DataFrame, tp: pd.DataFrame):
+    item_by_product_count = pd.DataFrame()
+    for item_num in raw.columns:
+        items = raw[item_num].value_counts()
+        item_by_product_count[item_num] = pd.Series(items.values, items.index)
+    item_by_product_count.fillna(0, inplace=True)
+    return item_by_product_count.T
 
-with open("processed_data/transactions.pkl", "wb") as f:
+
+raw_df = pd.read_csv("raw_data/transactions.csv")
+transaction_product_df = get_distinct(raw_df)
+one_hot_df = get_one_hot(raw_df.iloc[:, 1:], transaction_product_df)
+item_product_counts = get_product_count_by_item(raw_df.iloc[:, 1:], transaction_product_df)
+
+
+with open("processed_data/one_hot.pkl", "wb") as f:
     pkl.dump(one_hot_df, f)
+
+with open("processed_data/item_product_counts.pkl", "wb") as f:
+    pkl.dump(item_product_counts, f)
