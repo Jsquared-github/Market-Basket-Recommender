@@ -1,6 +1,5 @@
 import pandas as pd
 import pickle as pkl
-import numpy as np
 
 
 def get_distinct(raw_df) -> pd.DataFrame:
@@ -40,14 +39,36 @@ def get_product_count_by_item(raw: pd.DataFrame, tp: pd.DataFrame):
     return item_by_product_count.T
 
 
+def get_tuple_item_sets(raw: pd.DataFrame):
+    item_sets = []
+    for row in raw.fillna(0).itertuples(index=False, name=None):
+        item_set = []
+        for element in row:
+            if element != 0:
+                item_set.append(element)
+        item_sets.append(tuple(item_set))
+    return item_sets
+
+
+# Passing raw data into various processing functions meant to achieve a certain data format/ state
 raw_df = pd.read_csv("raw_data/transactions.csv")
 transaction_product_df = get_distinct(raw_df)
 one_hot_df = get_one_hot(raw_df.iloc[:, 1:], transaction_product_df)
 item_product_counts = get_product_count_by_item(raw_df.iloc[:, 1:], transaction_product_df)
+item_set_tuples = get_tuple_item_sets(raw_df.iloc[:, 1:])
 
+# Writing processed dataframes into pkl files (75% train; 25% test)
+with open("processed_data/train/one_hot.pkl", "wb") as f:
+    pkl.dump(one_hot_df.iloc[:7376], f)
 
-with open("processed_data/one_hot.pkl", "wb") as f:
-    pkl.dump(one_hot_df, f)
+with open("processed_data/train/tuple_itemsets.pkl", "wb") as f:
+    pkl.dump(item_set_tuples[:7376], f)
+
+with open("processed_data/test/one_hot.pkl", "wb") as f:
+    pkl.dump(one_hot_df.iloc[7377:], f)
+
+with open("processed_data/test/tuple_itemsets.pkl", "wb") as f:
+    pkl.dump(item_set_tuples[7377:], f)
 
 with open("processed_data/item_product_counts.pkl", "wb") as f:
     pkl.dump(item_product_counts, f)

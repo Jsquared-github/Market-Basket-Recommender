@@ -6,10 +6,9 @@ from matplotlib import pyplot as plt
 import matplotlib as mpl
 
 
-def get_sorted_counts(data):
-    item_data = data.iloc[:, 1:]
+def get_sorted_counts(data: pd.DataFrame):
     sorted_items = []
-    for item, freq in item_data.sum().items():
+    for item, freq in data.sum().items():
         sorted_items.append((item, freq))
 
     sorted_items = np.array(sorted_items, dtype=[('item', '<U30'), ('count', int)])
@@ -30,7 +29,7 @@ def top_k_items(item_counts: np.ndarray, k, labels: bool = False):
 
     color_scheme = sns.color_palette('crest', n_colors=169)
     color_scheme.reverse()
-    ax = sns.barplot(x=items, y=freqs, palette=color_scheme, width=3.2)
+    ax = sns.barplot(x=items, y=freqs, palette=color_scheme, width=2.4)
     if not labels:
         ax.set(xticklabels=[])
     else:
@@ -39,14 +38,13 @@ def top_k_items(item_counts: np.ndarray, k, labels: bool = False):
 
 
 def stacked_item_counts(items: pd.DataFrame):
-    cmap = mpl.colormaps['viridis']
+    cmap = mpl.colormaps['turbo']
     colors = cmap(np.linspace(0, 1, 169))
     product_colors = {}
     for color, product in zip(colors, items.columns):
         product_colors[product] = mpl.colors.rgb2hex(color, True)
     fig = items.plot.bar(stacked=True, color=product_colors)
     fig.get_legend().remove()
-    fig.set(xticklabels=[])
     plt.show()
 
 
