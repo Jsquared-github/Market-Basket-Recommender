@@ -67,7 +67,12 @@ for rule in fpgrowth_rules:
     else:
         final_rules[lhs] = {rhs: candidate_rule_score}
 
-# for lhs in final_rules.keys():
-#     print(lhs, final_rules[lhs])
+
+max_lhs = 0
+for lhs in final_rules.keys():
+    cur_lhs = len(lhs)
+    max_lhs = max(max_lhs, cur_lhs)
+    # print(max_lhs, lhs, final_rules[lhs])
+final_rules["max_lhs"] = max_lhs
 with open('models/association_rules.pkl', "wb") as f:
     pkl.dump(final_rules, f)
