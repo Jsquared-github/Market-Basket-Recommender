@@ -36,7 +36,7 @@ def predict_items(transactions: pd.DataFrame, one_hot_transactions: pd.DataFrame
     for transaction in transactions.itertuples(name="Transaction"):
         index = transaction[0]
         total_items = transaction[1]
-        if total_items > 1:
+        if total_items > 1 and total_items < 32:
             item = get_prediction(transaction, total_items, arl_dict["max_lhs"]+2, arl_dict)
             if item:
                 correct = one_hot_transactions.at[index, item]
