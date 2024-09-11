@@ -58,8 +58,8 @@ item_product_counts = get_product_count_by_item(raw_df.iloc[:, 1:], transaction_
 item_set_tuples = get_tuple_item_sets(raw_df.iloc[:, 1:])
 
 # Writing processed dataframes into pkl files (75% train; 25% test)
-# with open("processed_data/train/one_hot.pkl", "wb") as f:
-#     pkl.dump(one_hot_df.iloc[:7376], f)
+with open("processed_data/test/test_one_hot.pkl", "wb") as f:
+    pkl.dump(one_hot_df.iloc[7376:], f)
 
 # with open("processed_data/one_hot.pkl", "wb") as f:
 #     pkl.dump(one_hot_df, f)
@@ -71,4 +71,4 @@ item_set_tuples = get_tuple_item_sets(raw_df.iloc[:, 1:])
 #     pkl.dump(item_product_counts, f)
 
 with open("processed_data/test/test_transactions.pkl", "wb") as f:
-    pkl.dump(raw_df.iloc[7377:], f)
+    pkl.dump(raw_df.iloc[7376:], f)
