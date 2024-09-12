@@ -41,8 +41,7 @@ def predict_items(transactions: pd.DataFrame, one_hot_transactions: pd.DataFrame
             if item:
                 correct = one_hot_transactions.at[index, item]
                 results["predictions"].append((index, item, correct))
-                if correct:
-                    total_correct += 1
+                total_correct += correct
             else:
                 results["unclassified"] += 1
         else:
@@ -67,5 +66,5 @@ print(results["unclassified"])
 print(results["metrics"]["coverage"])
 print(results["metrics"]["accuracy"])
 
-with open("results/rule_predictions.pkl", "wb") as f:
-    pkl.dump(results, f)
+# with open("results/rule_predictions.pkl", "wb") as f:
+#     pkl.dump(results, f)
