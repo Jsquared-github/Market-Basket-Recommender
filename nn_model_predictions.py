@@ -2,15 +2,6 @@ import pickle as pkl
 import pandas as pd
 from sklearn.neural_network import MLPClassifier
 
-with open("models/nn_predictor.pkl", "rb") as f:
-    nn_model: MLPClassifier = pkl.load(f)
-
-with open("processed_data/test/test_one_hot.pkl", "rb") as f:
-    oh_transactions: pd.DataFrame = pkl.load(f)
-
-with open("processed_data/test/test_transactions.pkl", "rb") as f:
-    transactions: pd.DataFrame = pkl.load(f)
-
 
 def modify_transactions(transactions: pd.DataFrame):
     modified_oh = transactions.copy(deep=True)
@@ -39,10 +30,19 @@ def get_results(predictions: list, unmodified_transactions: pd.DataFrame):
     return result
 
 
+with open("models/nn_predictor.pkl", "rb") as f:
+    nn_model: MLPClassifier = pkl.load(f)
+
+with open("processed_data/test/test_one_hot.pkl", "rb") as f:
+    oh_transactions: pd.DataFrame = pkl.load(f)
+
+with open("processed_data/test/test_transactions.pkl", "rb") as f:
+    transactions: pd.DataFrame = pkl.load(f)
+
 modified_transactions = modify_transactions(oh_transactions)
 predictions = predict_items(nn_model, modified_transactions)
 results = get_results(predictions, oh_transactions)
 print(results)
 
-with open("results/nn_predictions.pkl", "wb") as f:
-    pkl.dump(results, f)
+# with open("results/nn_predictions.pkl", "wb") as f:
+#     pkl.dump(results, f)

@@ -51,8 +51,8 @@ for rule in eclat_rules:
 
 _, fpgrowth_rules = fpgrowth(transactions, min_support=.001)
 for rule in fpgrowth_rules:
-    sigmoid_conv = (2/(1 + exp(-(log(rule.conviction))))) - 1
-    sigmoid_lift = (2/(1 + exp(-(abs(rule.lift-1))))) - 1
+    sigmoid_conv = (2/(1 + exp(-(10*log(rule.conviction))))) - 1
+    sigmoid_lift = (2/(1 + exp(-(10*abs(rule.lift-1))))) - 1
     sup_conf_score = rule.support*rule.confidence
     lift_conv_score = sigmoid_lift*sigmoid_conv
     lhs = rule.lhs
