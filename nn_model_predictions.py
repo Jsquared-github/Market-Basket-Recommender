@@ -19,11 +19,11 @@ def predict_items(nn_model: MLPClassifier, modified_transactions: pd.DataFrame):
     return nn_model.predict(X_test)
 
 
-def get_results(predictions: list, unmodified_transactions: pd.DataFrame):
+def get_results(predictions: list, transactions: pd.DataFrame):
     result = {"predictions": [], "unclassified": 0, "metrics": {"coverage": 1, "accuracy": None}}
     total_correct = 0
     for index, prediction in enumerate(predictions):
-        correct = unmodified_transactions.at[index+7376, prediction]
+        correct = transactions.at[index+7376, prediction]
         result["predictions"].append((index, prediction, correct))
         total_correct += correct
     result["metrics"]["accuracy"] = total_correct/len(predictions)
@@ -35,9 +35,6 @@ with open("models/nn_predictor.pkl", "rb") as f:
 
 with open("processed_data/test/test_one_hot.pkl", "rb") as f:
     oh_transactions: pd.DataFrame = pkl.load(f)
-
-with open("processed_data/test/test_transactions.pkl", "rb") as f:
-    transactions: pd.DataFrame = pkl.load(f)
 
 modified_transactions = modify_transactions(oh_transactions)
 predictions = predict_items(nn_model, modified_transactions)

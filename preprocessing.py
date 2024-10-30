@@ -30,7 +30,7 @@ def get_one_hot(raw: pd.DataFrame, distinct: pd.DataFrame) -> pd.DataFrame:
     return distinct
 
 
-def get_product_count_by_item(raw: pd.DataFrame, tp: pd.DataFrame):
+def get_product_count_by_item(raw: pd.DataFrame):
     item_by_product_count = pd.DataFrame()
     for item_num in raw.columns:
         items = raw[item_num].value_counts()
